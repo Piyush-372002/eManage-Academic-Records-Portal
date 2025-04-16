@@ -1,0 +1,83 @@
+body {
+    background-color: #f4f7fc;
+    font-family: 'Arial', sans-serif;
+}
+
+.container {
+    max-width: 800px;
+    margin: 50px auto;
+}
+
+.card {
+    border-radius: 12px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+
+}
+
+.card-header {
+    background: #004085;
+    color: white;
+    font-size: 1.5rem;
+    font-weight: bold;
+    text-align: center;
+    padding: 15px;
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+}
+
+.card-body {
+    padding: 25px;
+}
+
+.card-body p {
+    font-size: 1rem;
+    margin-bottom: 10px;
+}
+
+.btn-container {
+    display: flex;
+    justify-content: flex-start;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.btn-sm {
+    padding: 6px 12px;
+    font-size: 14px;
+}
+
+.section {
+    margin-top: 30px;
+    padding: 15px;
+    border-radius: 8px;
+    background: #f8f9fa;
+    box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.section h4 {
+    color: #343a40;
+    border-bottom: 2px solid #004085;
+    padding-bottom: 5px;
+    margin-bottom: 15px;
+}
+
+.list-group-item {
+    border: none;
+    padding: 10px 15px;
+}
+
+.list-group-item a {
+    float: right;
+}
+
+.btn-secondary {
+    width: 80px;
+}
+
+.btn-secondary:hover {
+    background-color: #5a6268;
+}
+
+.btn-danger:hover {
+    background-color: #c82333;
+}

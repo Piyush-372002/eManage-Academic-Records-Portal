@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Patent</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+</head>
+
+<body>
+    <div class="container row mt-3">
+        <div class="col-8 offset-3">
+            <h2>Edit Details</h2>
+            <form method="POST" action="/index/patents/<%=patent._id%>?_method=PUT">
+                <div class="mb-3">
+                    <label for="facultyName">Name of Faculty/Staff</label>
+                    <input type="text" name="patent[facultyName]" value="<%=patent.facultyName%>" class="form-control"
+                        required>
+                </div>
+
+                <div class="mb-3">
+                    <label for="patentTitle">Patent Title</label>
+                    <input type="text" name="patent[patentTitle]" value="<%=patent.patentTitle%>" class="form-control"
+                        required>
+                </div>
+
+                <div class="row">
+                    <div class="mb-3 col-md-4">
+                        <label for="patentNumber">Patent Number</label>
+                        <input type="number" name="patent[patentNumber]" value="<%=patent.patentNumber%>"
+                            class="form-control" required>
+                    </div>
+
+                    <div class="mb-3 col-md-8">
+                        <label for="dateOfAward">Date of Award</label>
+                        <input type="date" name="patent[dateOfAward]" value="<%=patent.dateOfAward%>"
+                            class="form-control" required>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="grantingBody">Patent granting body</label>
+                    <input type="text" name="patent[grantingBody]" value="<%=patent.grantingBody%>" class="form-control"
+                        required>
+                </div>
+
+                <div class="mb-3">
+                    <label for="status">Status(Published/ Granted)</label>
+                    <input type="text" name="patent[status]" value="<%=patent.status%>" class="form-control" required>
+                </div>
+
+                <div class="mb-3">
+                    <label for="certificate">Attach certificate</label>
+                    <input type="file" name="patent[certificate]" value="<%=patent.certificate%>" class="form-control">
+                </div>
+                <br><br>
+                <button type="submit" class="btn btn-success">Submit</button>
+            </form>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
+</body>
+
+</html>

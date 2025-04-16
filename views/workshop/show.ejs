@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>workshop details</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+    <link rel="stylesheet" href="/tshow.css">
+</head>
+<body>
+    <div class="container">
+        <h3><%= workshop.workshopName %></h3>
+        <p><b>Name of Faculty/Staff:</b> <%= workshop.facultyName %></p>
+        <p><b>Online/Offline:</b> <%= workshop.mode %></p>
+        <p><b>Duration(From):</b> <%= workshop.from %></p>
+        <p><b>Duration(To):</b> <%= workshop.to %></p>
+        <p><b>Organising Institute/ University:</b> <%= workshop.organiser %></p>
+        <p><b>Participant/ Organising Committee:</b> <%= workshop.participant %></p>
+        <p><b>Year:</b> <%= workshop.year %></p>
+        <p><b>Amount Paid Details:</b> <%= workshop.amountPaid %></p>
+        <p><b>Funding Agency:</b> <%= workshop.fundingAgency %></p>
+        <p><b>Summary:</b> <%= workshop.summary %></p>
+        <p><b>Attach Certificate:</b> <%= workshop.certificate %></p>
+
+        <div class="btns">
+            <a href="/index/workshop/<%=workshop._id%>/edit" class="btn btn-primary">Edit</a>
+            <form method="post" action="/index/workshop/<%=workshop._id%>?_method=Delete">
+                <button type="submit" class="btn btn-danger">Delete</button>
+            </form>
+        </div>
+
+    </div>
+</body>
+</html>

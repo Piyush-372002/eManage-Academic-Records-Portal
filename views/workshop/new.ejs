@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Workshop</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container row mt-3">
+        <div class="col-8 offset-3">
+            <!-- Textarea for Paste -->
+            <label for="bulkInput">Paste Workshop Details Here:</label>
+            <textarea id="bulkInput" class="form-control" rows="5" placeholder="Paste data in format:
+            John Doe, AI Workshop, Online, 2023-06-01, 2023-06-05, MIT, Participant, 2023, $200, NSF, Workshop on AI"></textarea>
+            <br>
+            <button type="button" class="btn btn-primary" onclick="fillForm()">Auto-Fill</button>
+            <br><br>
+
+            <form method="post" action="/index/workshop" class="needs-validation" novalidate>
+                <input type="hidden" id="userRole" value="<%= user.role %>">
+                
+                <div class="mb-3">
+                    <label for="facultyName" class="form-label">Name of Faculty/Staff</label>
+                    <input type="text" id="facultyName" name="workshop[facultyName]" class="form-control" required>
+                </div>
+                
+                <div class="mb-3">
+                    <label for="workshopName" class="form-label">Name of the STC/FDP/Workshop</label>
+                    <input type="text" id="workshopName" name="workshop[workshopName]" class="form-control" required>
+                </div>
+
+                <div class="mb-3">
+                    <label for="mode" class="form-label">Online/Offline</label>
+                    <input type="text" id="mode" name="workshop[mode]" class="form-control" required>
+                </div>
+                
+                <div class="row">
+                    <div class="mb-3 col-md-6">
+                        <label for="from" class="form-label">Duration (From)</label>
+                        <input type="date" id="from" name="workshop[from]" class="form-control" required>
+                    </div>
+                    <div class="mb-3 col-md-6">
+                        <label for="to" class="form-label">Duration (To)</label>
+                        <input type="date" id="to" name="workshop[to]" class="form-control" required>
+                    </div>
+                </div>
+                
+                <div class="mb-3">
+                    <label for="organiser" class="form-label">Organising Institute/University</label>
+                    <input type="text" id="organiser" name="workshop[organiser]" class="form-control" required>
+                </div>
+                
+                <div class="mb-3">
+                    <label for="participant" class="form-label">Participant/Organising Committee</label>
+                    <input type="text" id="participant" name="workshop[participant]" class="form-control" required>
+                </div>
+                
+                <div class="mb-3">
+                    <label for="year" class="form-label">Year</label>
+                    <input type="number" id="year" name="workshop[year]" class="form-control" required>
+                </div>
+                
+                <div class="mb-3">
+                    <label for="amountPaid" class="form-label">Amount Paid Details</label>
+                    <input type="text" id="amountPaid" name="workshop[amountPaid]" class="form-control">
+                </div>
+                
+                <div class="mb-3">
+                    <label for="fundingAgency" class="form-label">Funding Agency</label>
+                    <input type="text" id="fundingAgency" name="workshop[fundingAgency]" class="form-control">
+                </div>
+                
+                <div class="mb-3">
+                    <label for="summary" class="form-label">Summary (100-200 words)</label>
+                    <textarea id="summary" name="workshop[summary]" class="form-control" rows="4" required></textarea>
+                </div>
+                
+                <div class="mb-3">
+                    <label for="certificate" class="form-label">Attach Certificate</label>
+                    <input type="file" id="certificate" name="workshop[certificate]" class="form-control">
+                </div>
+
+
+                <!-- Assign to Faculty (Visible Only to Admin) -->
+            <% if (user.role === "admin") { %>
+                <div class="mb-3">
+                    <label for="assignedTo" class="form-label">Assign to Faculty</label>
+                    <select id="assignedTo" name="workshop[assignedTo]" class="form-select" required>
+                        <% if (facultys.length > 0) { %>
+                            <% facultys.forEach(faculty => { %>
+                                <option value="<%= faculty._id %>"><%= faculty.facultyName %></option>
+                            <% }) %>
+                        <% } else { %>
+                            <option disabled>No faculty members found</option>
+                        <% } %>
+                    </select>
+                    
+                    
+                </div>
+            <% } else { %>
+                <!-- Hidden Field for Teacher (Auto-Assign) -->
+                <input type="hidden" name="workshop[assignedTo]" value="<%=currfac? currfac._id:'' %>">
+            <% } %>
+
+                
+                <button type="submit" class="btn btn-success">Submit</button>
+            </form>
+        </div>
+    </div>
+    
+    <script>
+        function fillForm() {
+            let input = document.getElementById("bulkInput").value;
+            let details = input.split(",");
+            if (details.length < 10) {
+                alert("Please ensure all details are provided in the correct format.");
+                return;
+            }
+            
+            document.getElementById("facultyName").value = details[0].trim();
+            document.getElementById("workshopName").value = details[1].trim();
+            document.getElementById("mode").value = details[2].trim();
+            document.getElementById("from").value = details[3].trim();
+            document.getElementById("to").value = details[4].trim();
+            document.getElementById("organiser").value = details[5].trim();
+            document.getElementById("participant").value = details[6].trim();
+            document.getElementById("year").value = parseInt(details[7].trim(), 10) || "";
+            document.getElementById("amountPaid").value = details[8].trim();
+            document.getElementById("fundingAgency").value = details[9].trim();
+        }
+    </script>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,37 @@
+body {
+    background-color: #f4f6f9;
+}
+.navbar {
+    background-color: #007bff;
+}
+.navbar-brand, .nav-link {
+    color: white !important;
+}
+.card {
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s;
+    margin-bottom: 30px;
+}
+.card:hover {
+    transform: scale(1.05);
+}
+.fa-phone, .fa-envelope{
+    padding: 0px 10px 0px 0px;
+}
+.blocks{
+    display: flex;
+    justify-content: space-evenly;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+.btn-outline-dark {
+border-color: #007bff;
+color: #007bff; 
+}
+
+.btn-outline-dark:hover {
+background-color: #007bff !important; 
+color: white !important; 
+border-color: #007bff !important;
+}

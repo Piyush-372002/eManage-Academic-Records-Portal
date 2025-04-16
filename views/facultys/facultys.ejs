@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Faculty Directory</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="/faculty.css">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="/index">Faculty Management</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="/signup">Add Faculty</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/logout">Logout</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <%-include("../includes/flash.ejs")%>
+        <h1 class="mb-4 text-center text-primary">Faculty Directory</h1>
+    
+        <div class="d-flex justify-content-between mb-3">
+            <a href="/signup">
+                <button type="button" class="btn btn-primary">Add Record</button>
+            </a>
+            <div class="dropdown">
+                <button class="btn btn-primary dropdown-toggle" type="button" id="downloadDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                    Download
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="downloadDropdown">
+                    <li><a class="dropdown-item" href="/index/facultys/download/pdf"><i class="fa-solid fa-file-pdf"></i> PDF</a></li>
+                    <li><a class="dropdown-item" href="/index/facultys/download/excel"><i class="fa-solid fa-file-excel"></i> Excel</a></li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="row row-cols-lg-4 row-cols-md-2 row-cols-sm-1 mt-3 blocks">
+            <% for(let faculty of facultys) { %>
+                <div class="card mt-4" style="width: 18rem;">
+                    <div class="card-body freelancer-style1 bdrs12 bdr1 hover-box-shadow">
+                        <div class="d-flex align-items-center">
+                            <div class="thumb w90 position-relative rounded-circle align-items-center">
+                                <img class="rounded-circle mx-auto" style="height: 75px;" src="https://jcboseust.ac.in/static/sm.jpg" alt="img">
+                            </div>
+                            <div class="name align-items-center ms-3">
+                                <h5 class="card-title"><%=faculty.facultyName%></h5>
+                                <p class="card-text"><%=faculty.designation%></p>
+                            </div>
+                        </div>
+                        <div class="bod">
+                            <p class="card-text"><i class="fa-regular fa-envelope"></i><span><%=faculty.email%></span></p>
+                            <p class="card-text"><i class="fa-solid fa-phone"></i><span><%=faculty.mobile%></span></p>
+                        </div>
+                        <div class="foot mt-3">
+                            <a href="facultys/<%= faculty._id %>" class="btn btn-outline-dark rounded-pill shadow-sm">View Profile
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            <% } %>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html> 

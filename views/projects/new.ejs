@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Project</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+
+<div class="container row mt-3">
+    <div class="col-8 offset-3">
+        
+        <!-- Paste Box -->
+        <label for="bulkInput">Paste Project Details Here:</label>
+        <textarea id="bulkInput" class="form-control" rows="5" placeholder="Paste details in format:
+        John Doe, Professor, Research Paper Title, IEEE Journal, 2022, 10, 123-130, 987654321, Yes, March, Free, SCI, example@email.com"></textarea>
+        <br>
+        <button type="button" class="btn btn-primary" onclick="fillForm()">Auto-Fill</button>
+        <br><br>
+
+        <!-- Project Form -->
+        <form method="post" action="/index/projects" novalidate class="needs-validation">
+            <!-- Hidden field for logged-in user's role -->
+            <input type="hidden" id="userRole" value="<%= user.role %>">
+
+            <div class="mb-3">
+                <label for="name" class="form-label">Name</label>
+                <input type="text" id="name" name="project[name]" class="form-control" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="designation" class="form-label">Designation</label>
+                <input type="text" id="designation" name="project[designation]" class="form-control" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="title" class="form-label">Title of the Paper</label>
+                <input type="text" id="title" name="project[title]" class="form-control" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="conferenceName" class="form-label">Journal/Conference Name</label>
+                <input type="text" id="conferenceName" name="project[conferenceName]" class="form-control" required>
+            </div>
+
+            <div class="row">
+                <div class="mb-3 col-md-4">
+                    <label for="year" class="form-label">Year of Publication</label>
+                    <input type="number" id="year" name="project[year]" class="form-control" required>
+                </div>
+
+                <div class="mb-3 col-md-4">
+                    <label for="volume" class="form-label">Volume No.</label>
+                    <input type="number" id="volume" name="project[volume]" class="form-control" required>
+                </div>
+
+                <div class="mb-3 col-md-4">
+                    <label for="page" class="form-label">Page No.</label>
+                    <input type="number" id="page" name="project[page]" class="form-control" required>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label for="issn" class="form-label">ISSN No.</label>
+                <input type="number" id="issn" name="project[issn]" class="form-control">
+            </div>
+
+            <div class="mb-3">
+                <label for="ugc" class="form-label">UGC Approved</label>
+                <input type="text" id="ugc" name="project[ugc]" class="form-control">
+            </div>
+
+            <div class="mb-3">
+                <label for="month" class="form-label">Month of Publication</label>
+                <input type="text" id="month" name="project[month]" class="form-control">
+            </div>
+
+            <div class="mb-3">
+                <label for="paid" class="form-label">Paid/Free</label>
+                <input type="text" id="paid" name="project[paid]" class="form-control">
+            </div>
+
+            <div class="mb-3">
+                <label for="indexing" class="form-label">Indexing</label>
+                <input type="text" id="indexing" name="project[indexing]" class="form-control">
+            </div>
+
+            <div class="mb-3">
+                <label for="email" class="form-label">Email Address</label>
+                <input type="email" id="email" name="project[email]" class="form-control">
+            </div>
+
+            <!-- Assign to Faculty (Visible Only to Admin) -->
+            <% if (user.role === "admin") { %>
+                <div class="mb-3">
+                    <label for="assignedTo" class="form-label">Assign to Faculty</label>
+                    <select id="assignedTo" name="project[assignedTo]" class="form-select" required>
+                        <% if (facultys.length > 0) { %>
+                            <% facultys.forEach(faculty => { %>
+                                <option value="<%= faculty._id %>"><%= faculty.facultyName %></option>
+                            <% }) %>
+                        <% } else { %>
+                            <option disabled>No faculty members found</option>
+                        <% } %>
+                    </select>
+                    
+                    
+                </div>
+            <% } else { %>
+                <!-- Hidden Field for Teacher (Auto-Assign) -->
+                <input type="hidden" name="project[assignedTo]" value="<%=currfac? currfac._id:'' %>">
+            <% } %>
+
+            <button type="submit" class="btn btn-success">Submit</button>
+
+        </form>
+
+    </div>
+</div>
+
+<script>
+    function fillForm() {
+        let input = document.getElementById("bulkInput").value;
+        let details = input.split(",").map(item => item.trim());
+
+        if (details.length < 13) {
+            alert("Please ensure all details are provided in the correct format.");
+            return;
+        }
+
+        document.getElementById("name").value = details[0] || "";
+        document.getElementById("designation").value = details[1] || "";
+        document.getElementById("title").value = details[2] || "";
+        document.getElementById("conferenceName").value = details[3] || "";
+        document.getElementById("year").value = details[4] || "";
+        document.getElementById("volume").value = details[5] || "";
+        document.getElementById("page").value = details[6] || "";
+        document.getElementById("issn").value = details[7] || "";
+        document.getElementById("ugc").value = details[8] || "";
+        document.getElementById("month").value = details[9] || "";
+        document.getElementById("paid").value = details[10] || "";
+        document.getElementById("indexing").value = details[11] || "";
+        document.getElementById("email").value = details[12] || "";
+    }
+
+    (() => {
+        'use strict';
+        const forms = document.querySelectorAll('.needs-validation');
+
+        Array.from(forms).forEach(form => {
+            form.addEventListener('submit', event => {
+                if (!form.checkValidity()) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                }
+                form.classList.add('was-validated');
+            }, false);
+        });
+    })();
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>
