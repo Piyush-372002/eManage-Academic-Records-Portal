@@ -16,9 +16,9 @@
         <p><b>Patent Granting Body:</b> <%= patent.grantingBody %></p>
         <p><b>Patent Status (Published/Granted):</b> <%= patent.status %></p>
 
-        <div class="certificate-card">
-            <p><b>Certificate:</b> <%= patent.certificate %></p>
-        </div>
+        <p><b>Certificate:</b>
+            <img src="<%=patent.certificate.url%>" class="card-img show-img" alt="certificate">
+        </p>
    
        
         <div class="btns">

@@ -13,7 +13,10 @@ const userSchema=new Schema({
         type: String, 
         enum: ["admin", "teacher"], 
         required: true 
-    }
+    },
+    resetToken: String,
+    resetTokenExpiration: Date,
+
 });
 userSchema.plugin(passportLocalMongoose);
 module.exports=mongoose.model("User",userSchema);

@@ -12,15 +12,16 @@
         <h3><%= workshop.workshopName %></h3>
         <p><b>Name of Faculty/Staff:</b> <%= workshop.facultyName %></p>
         <p><b>Online/Offline:</b> <%= workshop.mode %></p>
-        <p><b>Duration(From):</b> <%= workshop.from %></p>
-        <p><b>Duration(To):</b> <%= workshop.to %></p>
+        <p><b>Duration(From):</b> <%= new Date(workshop.from).toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" }) %></p>
+        <p><b>Duration(To):</b> <%= new Date(workshop.to).toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" }) %></p>
         <p><b>Organising Institute/ University:</b> <%= workshop.organiser %></p>
         <p><b>Participant/ Organising Committee:</b> <%= workshop.participant %></p>
         <p><b>Year:</b> <%= workshop.year %></p>
         <p><b>Amount Paid Details:</b> <%= workshop.amountPaid %></p>
         <p><b>Funding Agency:</b> <%= workshop.fundingAgency %></p>
-        <p><b>Summary:</b> <%= workshop.summary %></p>
-        <p><b>Attach Certificate:</b> <%= workshop.certificate %></p>
+        <p><b>Certificate:</b>
+            <img src="<%=workshop.certificate.url%>" class="card-img show-img" alt="certificate">
+        </p>
 
         <div class="btns">
             <a href="/index/workshop/<%=workshop._id%>/edit" class="btn btn-primary">Edit</a>

@@ -5,6 +5,9 @@ const Faculty = require("../models/faculty.js");
 const wrapAsync = require("../utils/wrapAsync.js");
 const { validateWorkshop, isLoggedIn } = require("../middleware.js");
 
+const multer=require('multer');
+const {storage}=require("../cloudconfig.js");
+const upload=multer({storage})
 
 //STC_FDP_WORKSHOP page
 router.get("/", isLoggedIn, wrapAsync(async (req, res) => {
@@ -21,17 +24,22 @@ router.get("/new", isLoggedIn, async (req, res) => {
         res.render("workshop/new.ejs", { user: req.user, currfac });
     }
 })
-router.post("/", isLoggedIn, validateWorkshop, wrapAsync(async (req, res) => {
+router.post("/", isLoggedIn,upload.single("workshop[certificate]"), validateWorkshop, wrapAsync(async (req, res) => {
+    let url=req.file.path;
+    let filename=req.file.filename;
+
     const newWorkshop = new Workshop(req.body.workshop);
     if (req.user.role === "admin") {
         newWorkshop.owner = req.user._id;  // Admin who added it
         newWorkshop.assignedTo = req.body.workshop.assignedTo; // Admin assigns teacher
+        newWorkshop.certificate={url, filename};
         await newWorkshop.save();
         req.flash("success", "Record Added Successfully!!");
         res.redirect("/index/workshop");
     } else {
         newWorkshop.owner = req.user._id;  // Teacher who added it
         newWorkshop.assignedTo = req.body.workshop.assignedTo; // Automatically assign to themself
+        newWorkshop.certificate={url, filename};
         await newWorkshop.save();
         const currFaculty = await Faculty.findOne({ user: req.user._id });
         if (currFaculty) {

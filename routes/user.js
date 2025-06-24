@@ -1,3 +1,8 @@
+if(process.env.NODE_ENV !="production"){
+    require("dotenv").config();  // loads your .env file
+}
+
+
 const express=require("express");
 const router=express.Router();
 const User=require("../models/user.js");
@@ -7,6 +12,18 @@ const Project=require("../models/project.js");
 const Workshop=require("../models/workshop.js");
 const wrapAsync=require("../utils/wrapAsync");
 const passport = require("passport");
+const crypto = require("crypto");
+const nodemailer = require("nodemailer");
+
+
+const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+        user: process.env.GMAIL_USER,
+        pass: process.env.GMAIL_PASS  // Use the app password here, NOT your real email password
+    }
+});
+
 
 router.get("/signup",(req,res)=>{
     res.render("users/signup.ejs");
@@ -78,5 +95,86 @@ router.get("/logout",(req,res,next)=>{
         res.redirect("/");
     })
 })
+
+
+
+
+// GET: forgot password form
+router.get("/forgot-password", (req, res) => {
+    res.render("users/forgot-password.ejs");
+});
+
+// POST: send reset email
+router.post("/forgot-password", wrapAsync(async (req, res) => {
+    const { email } = req.body;
+    const user = await User.findOne({ email });
+    if (!user) {
+        req.flash("error", "No account found with that email.");
+        return res.redirect("/forgot-password");
+    }
+
+    // Generate token
+    const token = crypto.randomBytes(32).toString("hex");
+    const expire = Date.now() + 3600000; // 1 hour
+
+    user.resetToken = token;
+    user.resetTokenExpiration = expire;
+    await user.save();
+
+
+    const baseURL = process.env.BASE_URL;
+    const resetURL = `${baseURL}/reset-password/${token}`;
+
+    
+
+    await transporter.sendMail({
+        to: user.email,
+        from: 'no-reply@electronicsdept.com',
+        subject: 'Password Reset Request',
+        html: `
+            <p>Hello ${user.username},</p>
+            <p>You requested a password reset. Click below to reset your password:</p>
+            <p><a href="${resetURL}">${resetURL}</a></p>
+            <p>If you did not request this, ignore this email.</p>
+        `
+    });
+
+    req.flash("success", "Password reset link sent to your email.");
+    res.redirect("/login");
+}));
+
+// GET: reset form
+router.get("/reset-password/:token", wrapAsync(async (req, res) => {
+    const user = await User.findOne({
+        resetToken: req.params.token,
+        resetTokenExpiration: { $gt: Date.now() }
+    });
+    if (!user) {
+        req.flash("error", "Reset link expired or invalid.");
+        return res.redirect("/forgot-password");
+    }
+    res.render("users/reset-password.ejs", { token: req.params.token });
+}));
+
+// POST: handle password reset
+router.post("/reset-password/:token", wrapAsync(async (req, res) => {
+    const user = await User.findOne({
+        resetToken: req.params.token,
+        resetTokenExpiration: { $gt: Date.now() }
+    });
+    if (!user) {
+        req.flash("error", "Token expired or invalid.");
+        return res.redirect("/forgot-password");
+    }
+
+    const { password } = req.body;
+    await user.setPassword(password); // passport-local-mongoose method
+    user.resetToken = undefined;
+    user.resetTokenExpiration = undefined;
+    await user.save();
+
+    req.flash("success", "Password reset successfully. You can now login.");
+    res.redirect("/login");
+}));
 
 module.exports=router;

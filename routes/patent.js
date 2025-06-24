@@ -6,7 +6,8 @@ const wrapAsync = require("../utils/wrapAsync.js");
 const { validatePatent, isLoggedIn, isAdmin, isTeacher } = require("../middleware.js");
 
 const multer=require('multer');
-const upload=multer({dest: 'uploads/'})
+const {storage}=require("../cloudconfig.js");
+const upload=multer({storage})
 
 //patent page
 router.get("/", isLoggedIn, wrapAsync(async (req, res) => {
@@ -19,17 +20,22 @@ router.get("/new", isLoggedIn, async (req, res) => {
     const currfac = await Faculty.findOne({ user: req.user._id });
     res.render("patents/new.ejs", { currfac, user: req.user ,facultys});
 })
-router.post("/", upload.single("patent[certificate]"), isLoggedIn, validatePatent, wrapAsync(async (req, res) => {
+router.post("/", isLoggedIn,upload.single("patent[certificate]"),validatePatent, wrapAsync(async (req, res) => {
+    let url=req.file.path;
+    let filename=req.file.filename;
+
     const newPatent = new Patent(req.body.patent);
     if (req.user.role === "admin") {
         newPatent.owner = req.user._id;  // Admin who added it
         newPatent.assignedTo = req.body.patent.assignedTo; // Admin assigns teacher
+        newPatent.certificate={url, filename};
         await newPatent.save();
         req.flash("success", "Record Added Successfully!!");
         res.redirect("/index/patents");
     } else {
         newPatent.owner = req.user._id;  // Teacher who added it
         newPatent.assignedTo = req.body.patent.assignedTo; // Automatically assign to themself
+        newPatent.certificate={url, filename};
         await newPatent.save();
         const currFaculty = await Faculty.findOne({ user: req.user._id });
         if (currFaculty) {
@@ -40,6 +46,9 @@ router.post("/", upload.single("patent[certificate]"), isLoggedIn, validatePaten
         }
     }
 }))
+
+
+
 //patent show
 router.get("/:id", isLoggedIn, wrapAsync(async (req, res) => {
     let { id } = req.params;
@@ -108,4 +117,5 @@ router.delete("/:id", isLoggedIn, wrapAsync(async (req, res) => {
         }
     }
 }))
+
 module.exports = router;

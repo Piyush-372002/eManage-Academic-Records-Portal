@@ -17,7 +17,7 @@
             <button type="button" class="btn btn-primary" onclick="fillForm()">Auto-Fill</button>
             <br><br>
 
-            <form method="post" action="/index/workshop" class="needs-validation" novalidate>
+            <form method="post" action="/index/workshop" class="needs-validation" novalidate enctype="multipart/form-data">
                 <input type="hidden" id="userRole" value="<%= user.role %>">
                 
                 <div class="mb-3">
@@ -71,10 +71,7 @@
                     <input type="text" id="fundingAgency" name="workshop[fundingAgency]" class="form-control">
                 </div>
                 
-                <div class="mb-3">
-                    <label for="summary" class="form-label">Summary (100-200 words)</label>
-                    <textarea id="summary" name="workshop[summary]" class="form-control" rows="4" required></textarea>
-                </div>
+               
                 
                 <div class="mb-3">
                     <label for="certificate" class="form-label">Attach Certificate</label>

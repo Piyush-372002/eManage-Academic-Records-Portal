@@ -42,13 +42,9 @@ const workshopSchema=new Schema({
         type:String,
         required:true,
     },
-    summary:{
-        type:String,
-        required:true,
-    },
     certificate:{
-        type:String,
-        // required:true,
+        url:String,
+        filename: String
     },
     owner:{
         type:Schema.Types.ObjectId,

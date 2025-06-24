@@ -27,8 +27,8 @@ const patentSchema=new Schema({
         required:true,
     },
     certificate:{
-        type:String,
-        // required:true,
+        url:String,
+        filename: String
     },
     owner:{
         type:Schema.Types.ObjectId,

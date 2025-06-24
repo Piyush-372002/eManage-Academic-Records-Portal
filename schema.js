@@ -45,7 +45,6 @@ module.exports.workshopSchema=Joi.object({
         year:Joi.number().required(),
         amountPaid:Joi.string().required(),
         fundingAgency:Joi.string().required(),
-        summary:Joi.string().required(),
         certificate:Joi.string().allow("",null),
         assignedTo: Joi.string().optional()
     }).required(),
