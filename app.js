@@ -1,6 +1,6 @@
-// if(process.env.NODE_ENV !="production"){
+if(process.env.NODE_ENV !="production"){
     require("dotenv").config();  // loads your .env file
-// }
+}
 
 
 const express=require("express");
@@ -45,7 +45,9 @@ main().then((res)=>{
 async function main() {
     await mongoose.connect(dbUrl);
 }
-console.log(dbUrl);
+console.log("ATLASDB_URL from env:", process.env.ATLASDB_URL);
+console.log("SECRET from env:", process.env.SECRET);
+
 const store=MongoStore.create({
     mongoUrl: dbUrl,
     crypto: {
