@@ -1,6 +1,6 @@
-if(process.env.NODE_ENV !="production"){
+// if(process.env.NODE_ENV !="production"){
     require("dotenv").config();  // loads your .env file
-}
+// }
 
 
 const express=require("express");
@@ -45,7 +45,7 @@ main().then((res)=>{
 async function main() {
     await mongoose.connect(dbUrl);
 }
-
+console.log(dbUrl);
 const store=MongoStore.create({
     mongoUrl: dbUrl,
     crypto: {
